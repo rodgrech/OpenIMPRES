@@ -93,6 +93,30 @@ class Transaction:
 
         return ""
 
+    @property
+    def match_rom(self) -> str:
+        if len(self.parts) >= 9 and self.parts[0] == "55":
+            return ":".join(self.parts[1:9])
+        return ""
+
+    @property
+    def match_family(self) -> str:
+        if len(self.parts) >= 2 and self.parts[0] == "55":
+            return ONE_WIRE_FAMILIES.get(self.parts[1], "")
+        return ""
+
+    @property
+    def match_op(self) -> str:
+        if len(self.parts) >= 10 and self.parts[0] == "55":
+            return self.parts[9]
+        return ""
+
+    @property
+    def match_address(self) -> str:
+        if len(self.parts) >= 12 and self.parts[0] == "55":
+            return f"0x{self.parts[11]}{self.parts[10]}"
+        return ""
+
 
 @dataclasses.dataclass
 class Capture:
@@ -147,17 +171,18 @@ def parse_capture(path: pathlib.Path) -> Capture:
             Transaction(path.name, capture.battery, capture.state, bytes_text)
         )
 
-    # Fallback for short manually written capture notes.
-    if not capture.transactions:
-        for match in HEX_STREAM_RE.finditer(text):
-            bytes_text = normalize_hex(match.group(0))
-            key = ("", bytes_text)
-            if key in seen:
-                continue
-            seen.add(key)
-            capture.transactions.append(
-                Transaction(path.name, capture.battery, capture.state, bytes_text)
-            )
+    # Also collect manually written hex snippets that are not part of JSON rows.
+    # Capture notes often summarize important transactions in prose before the
+    # raw examples, and those summaries are the easiest place to compare packs.
+    seen_bytes = {tx.bytes_text for tx in capture.transactions}
+    for match in HEX_STREAM_RE.finditer(text):
+        bytes_text = normalize_hex(match.group(0))
+        if bytes_text in seen_bytes:
+            continue
+        seen_bytes.add(bytes_text)
+        capture.transactions.append(
+            Transaction(path.name, capture.battery, capture.state, bytes_text)
+        )
 
     return capture
 
@@ -215,6 +240,116 @@ def unique_prefixes(
     return collections.Counter({key: count for key, count in target.items() if key not in others})
 
 
+def ds2433_read_rows(captures: Iterable[Capture]) -> list[Transaction]:
+    rows: list[Transaction] = []
+    for capture in captures:
+        for tx in capture.transactions:
+            if tx.match_family != "DS2433_EEPROM":
+                continue
+            if tx.match_op != "F0":
+                continue
+            if not tx.match_address:
+                continue
+            rows.append(tx)
+    return rows
+
+
+def ds2438_rows(captures: Iterable[Capture]) -> list[Transaction]:
+    rows: list[Transaction] = []
+    for capture in captures:
+        for tx in capture.transactions:
+            if tx.match_family == "DS2438_BATTERY_MONITOR":
+                rows.append(tx)
+    return rows
+
+
+def format_sources(transactions: Iterable[Transaction]) -> str:
+    sources = sorted({tx.source for tx in transactions})
+    return "<br>".join(f"`{source}`" for source in sources)
+
+
+def build_ds2433_address_map(captures: list[Capture]) -> list[str]:
+    grouped: dict[tuple[str, str, str, str], list[Transaction]] = collections.defaultdict(list)
+    for tx in ds2433_read_rows(captures):
+        grouped[(tx.battery, tx.state or "", tx.match_rom, tx.match_address)].append(tx)
+
+    lines: list[str] = []
+    lines.append("## DS2433 Read-Memory Address Map")
+    lines.append("")
+    lines.append(
+        "Rows include Match ROM transactions with DS2433 family code `A3` and "
+        "operation `F0`. Addresses are decoded from the two bytes after `F0` "
+        "as little-endian values."
+    )
+    lines.append("")
+    lines.append("| Battery | State | DS2433 ROM | Address | Count | Sources | Example Bytes |")
+    lines.append("| --- | --- | --- | --- | ---: | --- | --- |")
+
+    for (battery, state, rom, address), transactions in sorted(grouped.items()):
+        example = min((tx.bytes_text for tx in transactions), key=len)
+        lines.append(
+            f"| `{battery}` | `{state}` | `{rom}` | `{address}` | "
+            f"{len(transactions)} | {format_sources(transactions)} | `{example}` |"
+        )
+
+    if not grouped:
+        lines.append("| _none_ |  |  |  | 0 |  |  |")
+
+    lines.append("")
+    return lines
+
+
+def build_ds2433_coverage(captures: list[Capture]) -> list[str]:
+    addresses_by_battery: dict[str, set[str]] = collections.defaultdict(set)
+    for tx in ds2433_read_rows(captures):
+        addresses_by_battery[tx.battery].add(tx.match_address)
+
+    all_addresses = sorted({address for values in addresses_by_battery.values() for address in values})
+    batteries = sorted(addresses_by_battery)
+
+    lines: list[str] = []
+    lines.append("## DS2433 Address Coverage")
+    lines.append("")
+    if not all_addresses or not batteries:
+        lines.append("_none_")
+        lines.append("")
+        return lines
+
+    lines.append("| Address | " + " | ".join(f"`{battery}`" for battery in batteries) + " |")
+    lines.append("| --- | " + " | ".join("---" for _ in batteries) + " |")
+    for address in all_addresses:
+        cells = ["yes" if address in addresses_by_battery[battery] else "" for battery in batteries]
+        lines.append("| `" + address + "` | " + " | ".join(cells) + " |")
+
+    lines.append("")
+    return lines
+
+
+def build_ds2438_summary(captures: list[Capture]) -> list[str]:
+    grouped: dict[tuple[str, str, str, str], list[Transaction]] = collections.defaultdict(list)
+    for tx in ds2438_rows(captures):
+        grouped[(tx.battery, tx.state or "", tx.match_rom, tx.match_op or "")].append(tx)
+
+    lines: list[str] = []
+    lines.append("## DS2438 Match ROM Summary")
+    lines.append("")
+    lines.append("| Battery | State | DS2438 ROM | Op | Count | Sources | Example Bytes |")
+    lines.append("| --- | --- | --- | --- | ---: | --- | --- |")
+
+    for (battery, state, rom, op), transactions in sorted(grouped.items()):
+        example = min((tx.bytes_text for tx in transactions), key=len)
+        lines.append(
+            f"| `{battery}` | `{state}` | `{rom}` | `{op}` | "
+            f"{len(transactions)} | {format_sources(transactions)} | `{example}` |"
+        )
+
+    if not grouped:
+        lines.append("| _none_ |  |  |  | 0 |  |  |")
+
+    lines.append("")
+    return lines
+
+
 def build_report(captures: list[Capture], prefix_len: int) -> str:
     grouped = group_by_battery(captures)
     lines: list[str] = []
@@ -267,6 +402,10 @@ def build_report(captures: list[Capture], prefix_len: int) -> str:
         lines.append("")
         lines.append(format_counter(unique_prefixes(grouped, battery, prefix_len), limit=30))
         lines.append("")
+
+    lines.extend(build_ds2433_address_map(captures))
+    lines.extend(build_ds2433_coverage(captures))
+    lines.extend(build_ds2438_summary(captures))
 
     lines.append("## Transaction Rows")
     lines.append("")

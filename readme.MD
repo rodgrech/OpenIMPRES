@@ -79,4 +79,6 @@ Capture analysis can be regenerated with:
 python tools\analyze_captures.py
 ```
 
-The generated report is `analysis/capture-analysis.md`.
+The generated report is `analysis/capture-analysis.md`. It includes first-byte
+families, prefix candidates, a DS2433 read-memory address map, DS2433 address
+coverage by battery, and a DS2438 Match ROM summary.
