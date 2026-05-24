@@ -20,6 +20,8 @@
 - `2026-05-24-v4-vhf-maintenance-discharging-001.md`: battery `VHF`, state `maintenance mode / discharging`, transactions 14
 - `2026-05-24-v4-vhf-maintenance-discharging-002.md`: battery `VHF`, state `maintenance mode / discharging`, transactions 12
 - `2026-05-24-v4-xts2500-nntn6263a-001.md`: battery `XTS2500`, state `discharge`, transactions 10
+- `2026-05-24-v5-xts2500-discharge-rearm-001.md`: battery `XTS2500`, state `discharge`, transactions 12
+- `2026-05-24-v5-xts2500-discharge-reinsert-001.md`: battery `XTS2500`, state `discharge`, transactions 11
 
 ## First-Byte Families
 
@@ -55,9 +57,10 @@
 
 ### XTS2500
 
-- `55`: 8
-- `A3`: 1
-- `A6`: 1
+- `55`: 25
+- `A3`: 3
+- `A6`: 3
+- `FF`: 2
 
 ### unknown
 
@@ -132,10 +135,10 @@
 
 ### XTS2500 prefix length 6
 
-- `55:A3:B4:25:1A:01`: 6
-- `55:A6:FB:88:1A:01`: 2
-- `A3:B4:25:1A:01:00`: 1
-- `A6:FB:88:1A:01:00`: 1
+- `55:A3:B4:25:1A:01`: 15
+- `55:A6:FB:88:1A:01`: 10
+- `A3:B4:25:1A:01:00`: 3
+- `A6:FB:88:1A:01:00`: 3
 
 ### unknown prefix length 6
 
@@ -192,10 +195,10 @@ Hints are based on common 1-Wire commands plus DS2433 (`A3`) and DS2438 (`A6`) f
 
 ### XTS2500
 
-- `MATCH_ROM->DS2433_EEPROM`: 6
-- `MATCH_ROM->DS2438_BATTERY_MONITOR`: 2
-- `DS2433_EEPROM`: 1
-- `DS2438_BATTERY_MONITOR`: 1
+- `MATCH_ROM->DS2433_EEPROM`: 15
+- `MATCH_ROM->DS2438_BATTERY_MONITOR`: 10
+- `DS2433_EEPROM`: 3
+- `DS2438_BATTERY_MONITOR`: 3
 
 ### unknown
 
@@ -254,10 +257,10 @@ Hints are based on common 1-Wire commands plus DS2433 (`A3`) and DS2438 (`A6`) f
 
 ### XTS2500 unique prefix length 6
 
-- `55:A3:B4:25:1A:01`: 6
-- `55:A6:FB:88:1A:01`: 2
-- `A3:B4:25:1A:01:00`: 1
-- `A6:FB:88:1A:01:00`: 1
+- `55:A3:B4:25:1A:01`: 15
+- `55:A6:FB:88:1A:01`: 10
+- `A3:B4:25:1A:01:00`: 3
+- `A6:FB:88:1A:01:00`: 3
 
 ## DS2433 Read-Memory Address Map
 
@@ -282,12 +285,15 @@ Rows include Match ROM transactions with DS2433 family code `A3` and operation `
 | `VHF` | `maintenance mode / discharging` | `A3:FC:BC:87:03:00:50:3E` | `0x0148` | 2 | `2026-05-24-v4-vhf-maintenance-discharging-001.md`<br>`2026-05-24-v4-vhf-maintenance-discharging-002.md` | `55:A3:FC:BC:87:03:00:50:3E:F0:48:01:FF` |
 | `VHF` | `maintenance mode / discharging` | `A3:FC:BC:87:03:00:50:3E` | `0x01D9` | 1 | `2026-05-24-v4-vhf-maintenance-discharging-002.md` | `55:A3:FC:BC:87:03:00:50:3E:F0:D9:01` |
 | `VHF` | `maintenance mode / discharging` | `A3:FC:BC:87:03:00:50:3E` | `0x01E9` | 1 | `2026-05-24-v4-vhf-maintenance-discharging-001.md` | `55:A3:FC:BC:87:03:00:50:3E:F0:E9:01:FF` |
-| `XTS2500` | `discharge` | `A3:B4:25:1A:01:00:50:9D` | `0x0000` | 1 | `2026-05-24-v4-xts2500-nntn6263a-001.md` | `55:A3:B4:25:1A:01:00:50:9D:F0:00:00:FF:FF:FF:FF:FF` |
-| `XTS2500` | `discharge` | `A3:B4:25:1A:01:00:50:9D` | `0x0041` | 1 | `2026-05-24-v4-xts2500-nntn6263a-001.md` | `55:A3:B4:25:1A:01:00:50:9D:F0:41:00:FF:FF:FF:FF:FF` |
-| `XTS2500` | `discharge` | `A3:B4:25:1A:01:00:50:9D` | `0x0048` | 1 | `2026-05-24-v4-xts2500-nntn6263a-001.md` | `55:A3:B4:25:1A:01:00:50:9D:F0:48:00` |
-| `XTS2500` | `discharge` | `A3:B4:25:1A:01:00:50:9D` | `0x004C` | 1 | `2026-05-24-v4-xts2500-nntn6263a-001.md` | `55:A3:B4:25:1A:01:00:50:9D:F0:4C:00` |
+| `XTS2500` | `discharge` | `A3:B4:25:1A:01:00:50:9D` | `0x0000` | 2 | `2026-05-24-v4-xts2500-nntn6263a-001.md`<br>`2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `55:A3:B4:25:1A:01:00:50:9D:F0:00:00:FF:FF:FF:FF:FF` |
+| `XTS2500` | `discharge` | `A3:B4:25:1A:01:00:50:9D` | `0x0041` | 2 | `2026-05-24-v4-xts2500-nntn6263a-001.md`<br>`2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `55:A3:B4:25:1A:01:00:50:9D:F0:41:00:FF:FF:FF:FF:FF` |
+| `XTS2500` | `discharge` | `A3:B4:25:1A:01:00:50:9D` | `0x0048` | 2 | `2026-05-24-v4-xts2500-nntn6263a-001.md`<br>`2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `55:A3:B4:25:1A:01:00:50:9D:F0:48:00` |
+| `XTS2500` | `discharge` | `A3:B4:25:1A:01:00:50:9D` | `0x004C` | 2 | `2026-05-24-v4-xts2500-nntn6263a-001.md`<br>`2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `55:A3:B4:25:1A:01:00:50:9D:F0:4C:00` |
 | `XTS2500` | `discharge` | `A3:B4:25:1A:01:00:50:9D` | `0x0060` | 1 | `2026-05-24-v4-xts2500-nntn6263a-001.md` | `55:A3:B4:25:1A:01:00:50:9D:F0:60:00` |
-| `XTS2500` | `discharge` | `A3:B4:25:1A:01:00:50:9D` | `0x01E9` | 1 | `2026-05-24-v4-xts2500-nntn6263a-001.md` | `55:A3:B4:25:1A:01:00:50:9D:F0:E9:01:FF` |
+| `XTS2500` | `discharge` | `A3:B4:25:1A:01:00:50:9D` | `0x0148` | 1 | `2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `55:A3:B4:25:1A:01:00:50:9D:F0:48:01:FF:FF` |
+| `XTS2500` | `discharge` | `A3:B4:25:1A:01:00:50:9D` | `0x01CB` | 2 | `2026-05-24-v5-xts2500-discharge-rearm-001.md` | `55:A3:B4:25:1A:01:00:50:9D:F0:CB:01:FF:FF` |
+| `XTS2500` | `discharge` | `A3:B4:25:1A:01:00:50:9D` | `0x01E6` | 1 | `2026-05-24-v5-xts2500-discharge-rearm-001.md` | `55:A3:B4:25:1A:01:00:50:9D:F0:E6:01` |
+| `XTS2500` | `discharge` | `A3:B4:25:1A:01:00:50:9D` | `0x01E9` | 2 | `2026-05-24-v4-xts2500-nntn6263a-001.md`<br>`2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `55:A3:B4:25:1A:01:00:50:9D:F0:E9:01:FF` |
 | `unknown` | `` | `A3:FC:BC:87:03:00:50:3E` | `0x01C4` | 6 | `2026-05-24-display-update-001.md`<br>`2026-05-24-display-update-002-serial.md`<br>`2026-05-24-insert-display-only-003.md`<br>`2026-05-24-reseat-display-only-002.md`<br>`2026-05-24-reseat-identity-001.md` | `55:A3:FC:BC:87:03:00:50:3E:F0:C4:01` |
 | `unknown` | `` | `A3:FC:BC:87:03:00:50:3E` | `0x01E6` | 5 | `2026-05-24-display-update-001.md`<br>`2026-05-24-display-update-002-serial.md`<br>`2026-05-24-insert-display-only-003.md`<br>`2026-05-24-reseat-display-only-002.md`<br>`2026-05-24-reseat-identity-001.md` | `55:A3:FC:BC:87:03:00:50:3E:F0:E6:01` |
 | `unknown` | `` | `A3:FC:BC:87:03:00:50:3E` | `0x80C4` | 1 | `2026-05-24-display-update-001.md` | `55:A3:FC:BC:87:03:00:50:3E:F0:C4:80:FF` |
@@ -301,10 +307,11 @@ Rows include Match ROM transactions with DS2433 family code `A3` and operation `
 | `0x0048` | yes | yes | yes |  |
 | `0x004C` | yes | yes | yes |  |
 | `0x0060` | yes | yes | yes |  |
-| `0x0148` | yes | yes |  |  |
+| `0x0148` | yes | yes | yes |  |
 | `0x01C4` |  |  |  | yes |
+| `0x01CB` |  |  | yes |  |
 | `0x01D9` | yes | yes |  |  |
-| `0x01E6` |  |  |  | yes |
+| `0x01E6` |  |  | yes | yes |
 | `0x01E9` | yes | yes | yes |  |
 | `0x80C4` |  |  |  | yes |
 
@@ -320,8 +327,9 @@ Rows include Match ROM transactions with DS2433 family code `A3` and operation `
 | `VHF` | `` | `A6:D5:89:C5:40:00:50:B3` | `BE` | 1 | `2026-05-24-v3-vhf-compact-001.md` | `55:A6:D5:89:C5:40:00:50:B3:BE:07:FF` |
 | `VHF` | `maintenance mode / discharging` | `A6:D5:89:C5:40:00:50:B3` | `B8` | 2 | `2026-05-24-v4-vhf-maintenance-discharging-001.md`<br>`2026-05-24-v4-vhf-maintenance-discharging-002.md` | `55:A6:D5:89:C5:40:00:50:B3:B8:07` |
 | `VHF` | `maintenance mode / discharging` | `A6:D5:89:C5:40:00:50:B3` | `BE` | 2 | `2026-05-24-v4-vhf-maintenance-discharging-001.md`<br>`2026-05-24-v4-vhf-maintenance-discharging-002.md` | `55:A6:D5:89:C5:40:00:50:B3:BE:07:FF` |
-| `XTS2500` | `discharge` | `A6:FB:88:1A:01:00:50:DA` | `B8` | 1 | `2026-05-24-v4-xts2500-nntn6263a-001.md` | `55:A6:FB:88:1A:01:00:50:DA:B8:07` |
-| `XTS2500` | `discharge` | `A6:FB:88:1A:01:00:50:DA` | `BE` | 1 | `2026-05-24-v4-xts2500-nntn6263a-001.md` | `55:A6:FB:88:1A:01:00:50:DA:BE:07:FF` |
+| `XTS2500` | `discharge` | `A6:FB:88:1A:01:00:50:DA` | `B4` | 1 | `2026-05-24-v5-xts2500-discharge-rearm-001.md` | `55:A6:FB:88:1A:01:00:50:DA:B4` |
+| `XTS2500` | `discharge` | `A6:FB:88:1A:01:00:50:DA` | `B8` | 4 | `2026-05-24-v4-xts2500-nntn6263a-001.md`<br>`2026-05-24-v5-xts2500-discharge-rearm-001.md`<br>`2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `55:A6:FB:88:1A:01:00:50:DA:B8:07` |
+| `XTS2500` | `discharge` | `A6:FB:88:1A:01:00:50:DA` | `BE` | 5 | `2026-05-24-v4-xts2500-nntn6263a-001.md`<br>`2026-05-24-v5-xts2500-discharge-rearm-001.md`<br>`2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `55:A6:FB:88:1A:01:00:50:DA:BE:07:FF` |
 | `unknown` | `` | `A6:D5:89:22:10:00:D4:CC` | `37` | 1 | `2026-05-24-display-update-001.md` | `55:A6:D5:89:22:10:00:D4:CC:37:E0` |
 | `unknown` | `` | `A6:D5:89:61:20:00:A8:59` | `` | 1 | `2026-05-24-display-update-002-serial.md` | `55:A6:D5:89:61:20:00:A8:59` |
 | `unknown` | `` | `A6:D5:89:C5:40:00:50:53` | `5C` | 1 | `2026-05-24-display-update-002-serial.md` | `55:A6:D5:89:C5:40:00:50:53:5C` |
@@ -625,3 +633,26 @@ Rows include Match ROM transactions with DS2433 family code `A3` and operation `
 | `XTS2500` | `discharge` | `2026-05-24-v4-xts2500-nntn6263a-001.md` | `` | `MATCH_ROM->DS2438_BATTERY_MONITOR` | `rom=A6:FB:88:1A:01:00:50:DA op=BE addr=FF07` | `55:A6:FB:88:1A:01:00:50:DA:BE:07:FF` |
 | `XTS2500` | `discharge` | `2026-05-24-v4-xts2500-nntn6263a-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:B4:25:1A:01:00:50:9D op=F0 addr=0048` | `55:A3:B4:25:1A:01:00:50:9D:F0:48:00` |
 | `XTS2500` | `discharge` | `2026-05-24-v4-xts2500-nntn6263a-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:B4:25:1A:01:00:50:9D op=F0 addr=0060` | `55:A3:B4:25:1A:01:00:50:9D:F0:60:00` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-rearm-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:B4:25:1A:01:00:50:9D op=F0 addr=01E6` | `55:A3:B4:25:1A:01:00:50:9D:F0:E6:01` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-rearm-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:B4:25:1A:01:00:50:9D op=F0 addr=01CB` | `55:A3:B4:25:1A:01:00:50:9D:F0:CB:01:FF:FF:FF` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-rearm-001.md` | `` | `MATCH_ROM->DS2438_BATTERY_MONITOR` | `rom=A6:FB:88:1A:01:00:50:DA` | `55:A6:FB:88:1A:01:00:50:DA:B8:01` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-rearm-001.md` | `` | `MATCH_ROM->DS2438_BATTERY_MONITOR` | `rom=A6:FB:88:1A:01:00:50:DA op=BE addr=FF01` | `55:A6:FB:88:1A:01:00:50:DA:BE:01:FF:FF` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-rearm-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:B4:25:1A:01:00:50:9D op=F0 addr=01CB` | `55:A3:B4:25:1A:01:00:50:9D:F0:CB:01:FF:FF` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-rearm-001.md` | `` | `MATCH_ROM->DS2438_BATTERY_MONITOR` | `rom=A6:FB:88:1A:01:00:50:DA op=BE addr=FF01` | `55:A6:FB:88:1A:01:00:50:DA:BE:01:FF` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-rearm-001.md` | `` | `MATCH_ROM->DS2438_BATTERY_MONITOR` | `rom=A6:FB:88:1A:01:00:50:DA` | `55:A6:FB:88:1A:01:00:50:DA:B4` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-rearm-001.md` | `` | `MATCH_ROM->DS2438_BATTERY_MONITOR` | `rom=A6:FB:88:1A:01:00:50:DA` | `55:A6:FB:88:1A:01:00:50:DA:B8:00` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-rearm-001.md` | `` | `MATCH_ROM->DS2438_BATTERY_MONITOR` | `rom=A6:FB:88:1A:01:00:50:DA op=BE addr=FF00` | `55:A6:FB:88:1A:01:00:50:DA:BE:00:FF` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-rearm-001.md` | `` | `DS2433_EEPROM` | `` | `A3:B4:25:1A:01:00:50:9D` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-rearm-001.md` | `` | `` | `` | `FF:FF:FF` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-rearm-001.md` | `` | `DS2438_BATTERY_MONITOR` | `` | `A6:FB:88:1A:01:00:50:DA` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:B4:25:1A:01:00:50:9D op=F0 addr=0041` | `55:A3:B4:25:1A:01:00:50:9D:F0:41:00:FF:FF:FF:FF:FF` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:B4:25:1A:01:00:50:9D op=F0 addr=004C` | `55:A3:B4:25:1A:01:00:50:9D:F0:4C:00` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:B4:25:1A:01:00:50:9D op=F0 addr=0048` | `55:A3:B4:25:1A:01:00:50:9D:F0:48:00` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:B4:25:1A:01:00:50:9D op=F0 addr=01E9` | `55:A3:B4:25:1A:01:00:50:9D:F0:E9:01:FF` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:B4:25:1A:01:00:50:9D op=F0 addr=0148` | `55:A3:B4:25:1A:01:00:50:9D:F0:48:01:FF:FF` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:B4:25:1A:01:00:50:9D op=F0 addr=0000` | `55:A3:B4:25:1A:01:00:50:9D:F0:00:00:FF:FF:FF:FF:FF` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `` | `MATCH_ROM->DS2438_BATTERY_MONITOR` | `rom=A6:FB:88:1A:01:00:50:DA` | `55:A6:FB:88:1A:01:00:50:DA:B8:07` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `` | `MATCH_ROM->DS2438_BATTERY_MONITOR` | `rom=A6:FB:88:1A:01:00:50:DA op=BE addr=FF07` | `55:A6:FB:88:1A:01:00:50:DA:BE:07:FF` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `` | `DS2433_EEPROM` | `` | `A3:B4:25:1A:01:00:50:9D` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `` | `DS2438_BATTERY_MONITOR` | `` | `A6:FB:88:1A:01:00:50:DA` |
+| `XTS2500` | `discharge` | `2026-05-24-v5-xts2500-discharge-reinsert-001.md` | `` | `` | `` | `FF:FF:FF:FF:FF` |

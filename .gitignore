@@ -1,4 +1,8 @@
 vendor_sandbox/
+tools/bin/
+tools/arduino-data/
+tools/arduino-downloads/
+tools/arduino-cli-config/
 *.log
 *.tmp
 *.bak
