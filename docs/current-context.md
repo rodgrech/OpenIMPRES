@@ -74,18 +74,22 @@ V2 proved the insertion burst has strong 1-Wire-like timing. V3 segments
 captures around reset-like pulses so each possible 1-Wire transaction can be
 inspected independently.
 
-The current recommended sketch is V4:
+The current recommended sketch is V5 when the bench goal is EEPROM address/data
+comparison:
 
 ```text
-firmware/OpenIMPRES_V4_OneWire_Detail_Decoder/OpenIMPRES_V4_OneWire_Detail_Decoder.ino
+firmware/OpenIMPRES_V5_DS2433_Read_Map/OpenIMPRES_V5_DS2433_Read_Map.ino
 ```
 
-V4 keeps the same passive flow and adds structured fields for DS2433/DS2438 ROM
-selection, likely read-memory opcodes, and little-endian memory addresses.
+V5 keeps the same passive flow and emits compact `ds2433_reads` rows with
+DS2433 ROM, little-endian address, tail bytes, and slot/read counters. V4 is
+still useful when the full transaction stream is needed.
 
 ## Next Captures To Take
 
 Keep the display connected and capture repeatable sets with exact bench notes.
+For the current XTS2500 run, capture the discharge state now with V5, then
+capture again after the charger transitions to rapid charge.
 
 For each run, record:
 

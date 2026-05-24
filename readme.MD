@@ -21,6 +21,7 @@ Sketches live in `firmware/`:
 - `firmware/OpenIMPRES_V2_OneWire_Timing_Profiler/OpenIMPRES_V2_OneWire_Timing_Profiler.ino`
 - `firmware/OpenIMPRES_V3_Reset_Transaction_Profiler/OpenIMPRES_V3_Reset_Transaction_Profiler.ino`
 - `firmware/OpenIMPRES_V4_OneWire_Detail_Decoder/OpenIMPRES_V4_OneWire_Detail_Decoder.ino`
+- `firmware/OpenIMPRES_V5_DS2433_Read_Map/OpenIMPRES_V5_DS2433_Read_Map.ino`
 
 V1 waits for a serial character, arms for bus activity, captures a burst, decodes
 rough pulse-width frames, classifies message families, and prints JSON.
@@ -35,6 +36,10 @@ DS2438 (`A6`) chips seen in gen-2 IMPRES battery work.
 
 V4 adds structured 1-Wire detail fields for selected ROMs, candidate ROMs,
 opcodes, and likely little-endian memory addresses.
+
+V5 focuses the output on DS2433 EEPROM read-memory transactions and DS2438
+matches. It emits compact `ds2433_reads` rows with ROM, address, tail bytes, and
+slot counters for easier state-by-state comparisons.
 
 Known early frame families:
 
