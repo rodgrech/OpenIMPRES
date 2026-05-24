@@ -18,6 +18,9 @@
   - V5 rearm-without-removal captures showed shorter follow-up polling at
     DS2433 addresses `0x01E6` and `0x01CB`, plus DS2438 `B8`/`BE` operations
     with page-like trailing bytes `0x01` and `0x00`.
+  - During the discharge-to-rapid-charge transition, V5 still showed DS2433
+    `0x01E6` polling plus stable DS2438 `B8`/`BE` operations on the same
+    `A6:FB:88:1A:01:00:50:DA` ROM.
   - The NiMH pack uses the same broad DS2433/DS2438 structure as the PMNN4807A
     Li-Ion packs, making it a useful chemistry comparison sample.
 
