@@ -1,0 +1,14 @@
+vendor_sandbox/
+*.log
+*.tmp
+*.bak
+*.o
+*.obj
+*.dll
+*.exe
+*.pdb
+*.ilk
+build/
+dist/
+__pycache__/
+.pytest_cache/
