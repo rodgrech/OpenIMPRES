@@ -27,13 +27,20 @@ Observed family split:
 
 ## Known Captures And Batteries
 
-- Battery A: `NNTN6263A`, serial `5000011A25B4`
-  - Current fingerprint: `10:50:40:00:00:00`
+- Battery `XTS2500`: `NNTN6263A`, serial `5000011A25B4`, NiMH
+  - Earlier notes called this `Battery A`.
+  - V4 discharge capture on 2026-05-24 identified DS2433 ROM
+    `A3:B4:25:1A:01:00:50:9D` and DS2438 ROM
+    `A6:FB:88:1A:01:00:50:DA`.
 - Battery `VHF`: `PMNN4807A`, serial `50000387BCFC`, Li-Ion
   - Current fingerprint: `10:38:1B:02:00:80`
   - Confirmed in reset-delimited V3 transactions on 2026-05-24
   - Earlier notes used `PMMN4807A`; treat this as a typo/alias unless a label
     proves otherwise.
+- Battery `UHF`: `PMNN4807A`, serial `50000307727E`, Li-Ion
+  - V4 rapid-charge captures identified DS2433 ROM
+    `A3:7E:72:07:03:00:50:E3` and DS2438 ROM
+    `A6:73:BD:B3:40:00:50:67`.
 - Unknown/display-connected fingerprint seen:
   - `10:78:36:0C:00:00`
   - `10:72:36:0C:00:00`
@@ -63,15 +70,18 @@ The V1 drop-in sketch is a passive family classifier. It should:
   be associated with the current pack
 - print JSON suitable for later analysis
 
-V2 proved the insertion burst has strong 1-Wire-like timing. The next
-recommended sketch is V3:
+V2 proved the insertion burst has strong 1-Wire-like timing. V3 segments
+captures around reset-like pulses so each possible 1-Wire transaction can be
+inspected independently.
+
+The current recommended sketch is V4:
 
 ```text
-firmware/OpenIMPRES_V3_Reset_Transaction_Profiler/OpenIMPRES_V3_Reset_Transaction_Profiler.ino
+firmware/OpenIMPRES_V4_OneWire_Detail_Decoder/OpenIMPRES_V4_OneWire_Detail_Decoder.ino
 ```
 
-V3 segments captures around reset-like lows so each possible 1-Wire transaction
-can be inspected independently.
+V4 keeps the same passive flow and adds structured fields for DS2433/DS2438 ROM
+selection, likely read-memory opcodes, and little-endian memory addresses.
 
 ## Next Captures To Take
 
