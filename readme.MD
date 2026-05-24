@@ -20,6 +20,7 @@ Sketches live in `firmware/`:
 - `firmware/OpenIMPRES_V1_Passive_Family_Classifier/OpenIMPRES_V1_Passive_Family_Classifier.ino`
 - `firmware/OpenIMPRES_V2_OneWire_Timing_Profiler/OpenIMPRES_V2_OneWire_Timing_Profiler.ino`
 - `firmware/OpenIMPRES_V3_Reset_Transaction_Profiler/OpenIMPRES_V3_Reset_Transaction_Profiler.ino`
+- `firmware/OpenIMPRES_V4_OneWire_Detail_Decoder/OpenIMPRES_V4_OneWire_Detail_Decoder.ino`
 
 V1 waits for a serial character, arms for bus activity, captures a burst, decodes
 rough pulse-width frames, classifies message families, and prints JSON.
@@ -32,6 +33,9 @@ transaction can be inspected independently. It also labels obvious 1-Wire
 command/family hints, including likely Match ROM traffic for DS2433 (`A3`) and
 DS2438 (`A6`) chips seen in gen-2 IMPRES battery work.
 
+V4 adds structured 1-Wire detail fields for selected ROMs, candidate ROMs,
+opcodes, and likely little-endian memory addresses.
+
 Known early frame families:
 
 - `55:*` display/update or 1-Wire Match ROM traffic
@@ -41,10 +45,11 @@ Known early frame families:
 
 Known bench batteries:
 
-| Model | Serial | Fingerprint |
-| --- | --- | --- |
-| NNTN6263A | 5000011A25B4 | `10:50:40:00:00:00` |
-| PMNN4807A | 50000387BCFC | `10:38:1B:02:00:80` |
+| Bench label | Model | Serial | Chemistry | Key 1-Wire ROMs |
+| --- | --- | --- | --- | --- |
+| XTS2500 | NNTN6263A | 5000011A25B4 | NiMH | DS2433 `A3:B4:25:1A:01:00:50:9D`, DS2438 `A6:FB:88:1A:01:00:50:DA` |
+| VHF | PMNN4807A | 50000387BCFC | Li-Ion | DS2433 `A3:FC:BC:87:03:00:50:3E`, DS2438 `A6:D5:89:C5:40:00:50:B3` |
+| UHF | PMNN4807A | 50000307727E | Li-Ion | DS2433 `A3:7E:72:07:03:00:50:E3`, DS2438 `A6:73:BD:B3:40:00:50:67` |
 
 ## Capture Notes
 

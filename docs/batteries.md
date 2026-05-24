@@ -1,5 +1,21 @@
 # Bench Batteries
 
+## XTS2500
+
+- Bench label: `XTS2500`
+- Model number: `NNTN6263A`
+- Serial number: `5000011A25B4`
+- Chemistry: `NiMH`
+- Notes:
+  - Earlier notes called this `Battery A`.
+  - V4 discharge capture on 2026-05-24 identified DS2433 ROM
+    `A3:B4:25:1A:01:00:50:9D` and DS2438 ROM
+    `A6:FB:88:1A:01:00:50:DA`.
+  - The same capture showed DS2433 reads at `0x0000`, `0x0041`, `0x0048`,
+    `0x004C`, `0x0060`, and `0x01E9`.
+  - The NiMH pack uses the same broad DS2433/DS2438 structure as the PMNN4807A
+    Li-Ion packs, making it a useful chemistry comparison sample.
+
 ## VHF
 
 - Bench label: `VHF`
@@ -12,6 +28,12 @@
   - Confirmed reset-delimited fingerprint prefix:
     `10:38:1B:02:00:80`
   - Reconfirmed in compact V3 A/B/A capture on 2026-05-24.
+  - V4 maintenance/discharging capture on 2026-05-24 identified DS2433 ROM
+    `A3:FC:BC:87:03:00:50:3E` and DS2438 ROM
+    `A6:D5:89:C5:40:00:50:B3`, with DS2433 reads at `0x0000`, `0x0041`,
+    `0x0048`, `0x004C`, `0x0060`, `0x0148`, and `0x01E9`.
+  - Second V4 maintenance/discharging capture repeated the same DS2433/DS2438
+    ROMs and added a clean `0x01D9` DS2433 read.
 
 ## UHF
 
@@ -33,3 +55,8 @@
   - Third rapid-charge V3 capture on 2026-05-24 repeated DS2438 selection and
     DS2433 reads at likely little-endian addresses `0x004C`, `0x0048`,
     `0x0060`, `0x01E9`, and `0x0000`.
+  - First V4 rapid-charge capture on 2026-05-24 confirmed structured DS2433
+    read annotations at `0x004C`, `0x0048`, `0x0060`, `0x01D9`, and `0x01E9`.
+  - Second V4 rapid-charge capture on 2026-05-24 did not saturate and repeated
+    DS2433 reads at `0x0000`, `0x0041`, `0x0048`, `0x004C`, `0x0060`,
+    `0x01D9`, and `0x01E9`.

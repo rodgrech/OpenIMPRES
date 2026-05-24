@@ -15,13 +15,18 @@
 - `2026-05-24-v3-uhf-rapid-charge-003.md`: battery `UHF`, state `rapid charge`, transactions 49
 - `2026-05-24-v3-vhf-compact-001.md`: battery `VHF`, state `unknown`, transactions 4
 - `2026-05-24-v3-vhf-compact-002.md`: battery `VHF`, state `fully charged`, transactions 5
+- `2026-05-24-v4-uhf-rapid-charge-001.md`: battery `UHF`, state `rapid charge`, transactions 5
+- `2026-05-24-v4-uhf-rapid-charge-002.md`: battery `UHF`, state `rapid charge`, transactions 4
+- `2026-05-24-v4-vhf-maintenance-discharging-001.md`: battery `VHF`, state `maintenance mode / discharging`, transactions 5
+- `2026-05-24-v4-vhf-maintenance-discharging-002.md`: battery `VHF`, state `maintenance mode / discharging`, transactions 5
+- `2026-05-24-v4-xts2500-nntn6263a-001.md`: battery `XTS2500`, state `discharge`, transactions 5
 
 ## First-Byte Families
 
 ### UHF
 
 - `10`: 29
-- `55`: 20
+- `55`: 29
 - `21`: 18
 - `F0`: 9
 - `41`: 8
@@ -37,7 +42,12 @@
 
 ### VHF
 
+- `55`: 10
 - `10`: 9
+
+### XTS2500
+
+- `55`: 5
 
 ### unknown
 
@@ -57,9 +67,9 @@
 
 ### UHF prefix length 6
 
-- `55:A3:7E:72:07:03`: 13
+- `55:A3:7E:72:07:03`: 21
+- `55:A6:73:BD:B3:40`: 5
 - `10:3C:34:08:00:00`: 4
-- `55:A6:73:BD:B3:40`: 4
 - `10:3C:14:04:00:40`: 3
 - `21:74:58:10:00:00`: 3
 - `60:3A:D7:9D:05:02`: 3
@@ -90,12 +100,19 @@
 
 ### VHF prefix length 6
 
+- `55:A3:FC:BC:87:03`: 8
 - `10:38:1B:06:00:00`: 3
 - `10:38:1B:02:00:80`: 2
+- `55:A6:D5:89:C5:40`: 2
 - `10:38:1B:02:00:50`: 1
 - `10:38:1B:06:00:20`: 1
 - `10:38:1B:06:00:A0`: 1
 - `10:38:3B:0C:00:00`: 1
+
+### XTS2500 prefix length 6
+
+- `55:A3:B4:25:1A:01`: 4
+- `55:A6:FB:88:1A:01`: 1
 
 ### unknown prefix length 6
 
@@ -136,13 +153,19 @@ Hints are based on common 1-Wire commands plus DS2433 (`A3`) and DS2438 (`A6`) f
 
 ### UHF
 
-- `MATCH_ROM->DS2433_EEPROM`: 16
+- `MATCH_ROM->DS2433_EEPROM`: 24
 - `SEARCH_ROM_OR_READ_MEMORY`: 9
-- `MATCH_ROM->DS2438_BATTERY_MONITOR`: 4
+- `MATCH_ROM->DS2438_BATTERY_MONITOR`: 5
 
 ### VHF
 
-_none_
+- `MATCH_ROM->DS2433_EEPROM`: 8
+- `MATCH_ROM->DS2438_BATTERY_MONITOR`: 2
+
+### XTS2500
+
+- `MATCH_ROM->DS2433_EEPROM`: 4
+- `MATCH_ROM->DS2438_BATTERY_MONITOR`: 1
 
 ### unknown
 
@@ -155,9 +178,9 @@ _none_
 
 ### UHF unique prefix length 6
 
-- `55:A3:7E:72:07:03`: 13
+- `55:A3:7E:72:07:03`: 21
+- `55:A6:73:BD:B3:40`: 5
 - `10:3C:34:08:00:00`: 4
-- `55:A6:73:BD:B3:40`: 4
 - `10:3C:14:04:00:40`: 3
 - `21:74:58:10:00:00`: 3
 - `60:3A:D7:9D:05:02`: 3
@@ -190,6 +213,11 @@ _none_
 
 - `10:38:1B:06:00:20`: 1
 - `10:38:3B:0C:00:00`: 1
+
+### XTS2500 unique prefix length 6
+
+- `55:A3:B4:25:1A:01`: 4
+- `55:A6:FB:88:1A:01`: 1
 
 ## Transaction Rows
 
@@ -409,3 +437,27 @@ _none_
 | `VHF` | `fully charged` | `2026-05-24-v3-vhf-compact-002.md` | `8` | `` | `` | `10:38:1B:06:00:00:03:83:00:FE:FF:FF:FF:FF` |
 | `VHF` | `fully charged` | `2026-05-24-v3-vhf-compact-002.md` | `17` | `` | `` | `10:38:3B:0C:00:00:06:96:01` |
 | `VHF` | `fully charged` | `2026-05-24-v3-vhf-compact-002.md` | `40` | `` | `` | `10:38:1B:06:00:00:07:06:03:FE` |
+| `UHF` | `rapid charge` | `2026-05-24-v4-uhf-rapid-charge-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:7E:72:07:03:00:50:E3 op=F0 addr=004C` | `55:A3:7E:72:07:03:00:50:E3:F0:4C:00` |
+| `UHF` | `rapid charge` | `2026-05-24-v4-uhf-rapid-charge-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:7E:72:07:03:00:50:E3 op=F0 addr=01D9` | `55:A3:7E:72:07:03:00:50:E3:F0:D9:01` |
+| `UHF` | `rapid charge` | `2026-05-24-v4-uhf-rapid-charge-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:7E:72:07:03:00:50:E3 op=F0 addr=0048` | `55:A3:7E:72:07:03:00:50:E3:F0:48:00` |
+| `UHF` | `rapid charge` | `2026-05-24-v4-uhf-rapid-charge-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:7E:72:07:03:00:50:E3 op=F0 addr=01E9` | `55:A3:7E:72:07:03:00:50:E3:F0:E9:01:FF` |
+| `UHF` | `rapid charge` | `2026-05-24-v4-uhf-rapid-charge-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:7E:72:07:03:00:50:E3 op=F0 addr=0060` | `55:A3:7E:72:07:03:00:50:E3:F0:60:00` |
+| `UHF` | `rapid charge` | `2026-05-24-v4-uhf-rapid-charge-002.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:7E:72:07:03:00:50:E3 op=F0 addr=0041` | `55:A3:7E:72:07:03:00:50:E3:F0:41:00:FF:FF:FF:FF` |
+| `UHF` | `rapid charge` | `2026-05-24-v4-uhf-rapid-charge-002.md` | `` | `MATCH_ROM->DS2438_BATTERY_MONITOR` | `rom=A6:73:BD:B3:40:00:50:67` | `55:A6:73:BD:B3:40:00:50:67:B8:07` |
+| `UHF` | `rapid charge` | `2026-05-24-v4-uhf-rapid-charge-002.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:7E:72:07:03:00:50:E3 op=F0 addr=004C` | `55:A3:7E:72:07:03:00:50:E3:F0:4C:00` |
+| `UHF` | `rapid charge` | `2026-05-24-v4-uhf-rapid-charge-002.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:7E:72:07:03:00:50:E3 op=F0 addr=0000` | `55:A3:7E:72:07:03:00:50:E3:F0:00:00:FF:FF:FF:FF:FF` |
+| `VHF` | `maintenance mode / discharging` | `2026-05-24-v4-vhf-maintenance-discharging-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:FC:BC:87:03:00:50:3E op=F0 addr=0041` | `55:A3:FC:BC:87:03:00:50:3E:F0:41:00:FF:FF:FF:FF` |
+| `VHF` | `maintenance mode / discharging` | `2026-05-24-v4-vhf-maintenance-discharging-001.md` | `` | `MATCH_ROM->DS2438_BATTERY_MONITOR` | `rom=A6:D5:89:C5:40:00:50:B3` | `55:A6:D5:89:C5:40:00:50:B3:B8:07` |
+| `VHF` | `maintenance mode / discharging` | `2026-05-24-v4-vhf-maintenance-discharging-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:FC:BC:87:03:00:50:3E op=F0 addr=004C` | `55:A3:FC:BC:87:03:00:50:3E:F0:4C:00` |
+| `VHF` | `maintenance mode / discharging` | `2026-05-24-v4-vhf-maintenance-discharging-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:FC:BC:87:03:00:50:3E op=F0 addr=0060` | `55:A3:FC:BC:87:03:00:50:3E:F0:60:00` |
+| `VHF` | `maintenance mode / discharging` | `2026-05-24-v4-vhf-maintenance-discharging-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:FC:BC:87:03:00:50:3E op=F0 addr=0000` | `55:A3:FC:BC:87:03:00:50:3E:F0:00:00:FF:FF:FF:FF:FF` |
+| `VHF` | `maintenance mode / discharging` | `2026-05-24-v4-vhf-maintenance-discharging-002.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:FC:BC:87:03:00:50:3E op=F0 addr=0041` | `55:A3:FC:BC:87:03:00:50:3E:F0:41:00:FF:FF:FF:FF` |
+| `VHF` | `maintenance mode / discharging` | `2026-05-24-v4-vhf-maintenance-discharging-002.md` | `` | `MATCH_ROM->DS2438_BATTERY_MONITOR` | `rom=A6:D5:89:C5:40:00:50:B3` | `55:A6:D5:89:C5:40:00:50:B3:B8:07` |
+| `VHF` | `maintenance mode / discharging` | `2026-05-24-v4-vhf-maintenance-discharging-002.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:FC:BC:87:03:00:50:3E op=F0 addr=004C` | `55:A3:FC:BC:87:03:00:50:3E:F0:4C:00` |
+| `VHF` | `maintenance mode / discharging` | `2026-05-24-v4-vhf-maintenance-discharging-002.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:FC:BC:87:03:00:50:3E op=F0 addr=01D9` | `55:A3:FC:BC:87:03:00:50:3E:F0:D9:01` |
+| `VHF` | `maintenance mode / discharging` | `2026-05-24-v4-vhf-maintenance-discharging-002.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:FC:BC:87:03:00:50:3E op=F0 addr=0000` | `55:A3:FC:BC:87:03:00:50:3E:F0:00:00:FF:FF:FF:FF:FF` |
+| `XTS2500` | `discharge` | `2026-05-24-v4-xts2500-nntn6263a-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:B4:25:1A:01:00:50:9D op=F0 addr=0041` | `55:A3:B4:25:1A:01:00:50:9D:F0:41:00:FF:FF:FF:FF:FF` |
+| `XTS2500` | `discharge` | `2026-05-24-v4-xts2500-nntn6263a-001.md` | `` | `MATCH_ROM->DS2438_BATTERY_MONITOR` | `rom=A6:FB:88:1A:01:00:50:DA` | `55:A6:FB:88:1A:01:00:50:DA:B8:07` |
+| `XTS2500` | `discharge` | `2026-05-24-v4-xts2500-nntn6263a-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:B4:25:1A:01:00:50:9D op=F0 addr=004C` | `55:A3:B4:25:1A:01:00:50:9D:F0:4C:00` |
+| `XTS2500` | `discharge` | `2026-05-24-v4-xts2500-nntn6263a-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:B4:25:1A:01:00:50:9D op=F0 addr=01E9` | `55:A3:B4:25:1A:01:00:50:9D:F0:E9:01:FF` |
+| `XTS2500` | `discharge` | `2026-05-24-v4-xts2500-nntn6263a-001.md` | `` | `MATCH_ROM->DS2433_EEPROM` | `rom=A3:B4:25:1A:01:00:50:9D op=F0 addr=0000` | `55:A3:B4:25:1A:01:00:50:9D:F0:00:00:FF:FF:FF:FF:FF` |
