@@ -21,6 +21,10 @@
   - During the discharge-to-rapid-charge transition, V5 still showed DS2433
     `0x01E6` polling plus stable DS2438 `B8`/`BE` operations on the same
     `A6:FB:88:1A:01:00:50:DA` ROM.
+  - Charge-complete captures on 2026-05-25, with the display reporting 29%
+    rated capacity, 598 mAh, and 8.2 V, showed compact DS2433 polling at
+    `0x01E6`, `0x01CB`, and newly observed `0x01B4`, plus DS2438-only bursts
+    using stable `B4`, `B8:00`, and `BE:00`/`FF` traffic.
   - The NiMH pack uses the same broad DS2433/DS2438 structure as the PMNN4807A
     Li-Ion packs, making it a useful chemistry comparison sample.
 
